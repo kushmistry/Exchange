@@ -6,6 +6,8 @@ import AskTable from "./depth/AskTable";
 import BidTable from "./depth/BidTable";
 import { getDepth, getTicker } from "../utils/httpClient";
 import Loadder from "./core/loading";
+import { SinglingManager } from "../utils/singlingManager";
+import { Depth } from "../utils/types";
 
 function OrderbookTitle() {
   return (
@@ -26,14 +28,14 @@ export default function Orderbook({ market }: Readonly<{ market: any }>) {
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const centerScrollPosition = () => {
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
       const middlePosition =
         (scrollContainer.scrollHeight - scrollContainer.clientHeight) / 2;
       scrollContainer.scrollTop = middlePosition;
     }
-  }, [depthLodder, asks, bids]);
+  };
 
   useEffect(() => {
     (async () => {
@@ -45,12 +47,73 @@ export default function Orderbook({ market }: Readonly<{ market: any }>) {
 
         const tickerData = await getTicker(market);
         setPrice(tickerData.lastPrice);
+
+        centerScrollPosition();
+
+        SinglingManager.getInstance().registerCallback(
+          "depth",
+          (data: Partial<Depth>) => {
+            setAsks((originalAsks) => {
+              const copyedOriginalAsks = [...originalAsks];
+              for (const originalAsk of copyedOriginalAsks) {
+                for (const newAsk of data?.asks ?? []) {
+                  if (originalAsk[0] === newAsk[0]) {
+                    originalAsk[1] = newAsk[1];
+                    break;
+                  }
+                }
+                if (Number(originalAsk[1]) === 0) {
+                  copyedOriginalAsks.splice(
+                    copyedOriginalAsks.indexOf(originalAsk),
+                    1
+                  );
+                }
+              }
+              return copyedOriginalAsks;
+            });
+
+            setBids((originalBids) => {
+              const copyedOriginalBids = [...originalBids];
+              for (const originalBid of copyedOriginalBids) {
+                for (const newBid of data?.bids ?? []) {
+                  if (originalBid[0] === newBid[0]) {
+                    originalBid[1] = newBid[1];
+                    break;
+                  }
+                }
+                if (Number(originalBid[1]) === 0) {
+                  copyedOriginalBids.splice(
+                    copyedOriginalBids.indexOf(originalBid),
+                    1
+                  );
+                }
+              }
+              return copyedOriginalBids;
+            });
+          },
+          `DEPTH-${market}`
+        );
+        SinglingManager.getInstance().sendMessage({
+          method: "SUBSCRIBE",
+          params: [`depth.200ms.${market}`],
+        });
       } catch (error) {
         console.error(error);
       }
       setDepthLodder(false);
     })();
-  }, []);
+
+    return () => {
+      SinglingManager.getInstance().deRegisterCallback(
+        "depth",
+        `DEPTH-${market}`
+      );
+      SinglingManager.getInstance().sendMessage({
+        method: "UNSUBSCRIBE",
+        params: [`depth.200ms.${market}`],
+      });
+    };
+  }, [market]);
 
   return (
     <div className="pl-2 py-2">

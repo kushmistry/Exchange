@@ -46,7 +46,7 @@ export function TradeView({ market }: Readonly<{ market: any }>) {
       chartManagerRef.current = chartManager;
     }
   };
-  
+
   useEffect(() => {
     (async () => {
       setChartLoadder(true);
@@ -56,17 +56,19 @@ export function TradeView({ market }: Readonly<{ market: any }>) {
   }, [market, chartRef]);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div>
       {chartLoadder ? (
-        <Loadder />
+        <div
+          style={{
+            width: "100%",
+            height: "520px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loadder />
+        </div>
       ) : (
         <div style={{ height: "520px", width: "100%" }} ref={chartRef}></div>
       )}
