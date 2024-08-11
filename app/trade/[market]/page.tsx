@@ -9,19 +9,19 @@ export default function page() {
   const { market } = useParams();
 
   return (
-    <div className="w-full h-screen flex flex-row">
-      <div className="w-[80%] h-full">
+    <div className="w-full flex flex-row">
+      <div className="w-[80%]">
         <MarketBar market={market} />
-        <div className="w-full flex flex-row h-full">
-          <div className="w-[70%] h-full">
+        <div className="w-full flex flex-row">
+          <div className="w-[70%]">
             <Graph market={market} />
           </div>
-          <div className="w-[30%] h-full border-l border-r border-dividerColor">
+          <div className="w-[30%] border-l border-r border-dividerColor">
             <Orderbook market={market} />
           </div>
         </div>
       </div>
-      <div className="w-[20%] h-full ">
+      <div className="w-[20%]">
         <Swap market={market} />
       </div>
     </div>

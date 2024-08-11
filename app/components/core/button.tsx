@@ -65,18 +65,18 @@ export function LimitMarketButton({
   return (
     <button
       onClick={() => setType(name.toLocaleLowerCase())}
-      className={`text-sm ${
+      className={`text-sm border-b-2 ${
         type === name.toLocaleLowerCase()
-          ? "text-seledtedTabColor border-b-2 border-seledtedTabColor"
-          : "text-defaultTabColor hover:border-white hover:text-seledtedTabColor"
-      } border-b-2 border-transparent pb-1`}
+          ? "border-seledtedTabColor text-seledtedTabColor"
+          : "text-defaultTabColor border-transparent hover:border-white hover:text-seledtedTabColor"
+      } pb-1`}
     >
       {name}
     </button>
   );
 }
 
-export function SignupSigninButton({ name }: { name: string }) {
+export function SignupSigninButton({ name }: Readonly<{ name: string }>) {
   return (
     <button className="w-full h-12 text-md font-bold text-signupTextColor bg-signupColor px-3 py-1.5 rounded-lg">
       {name}
