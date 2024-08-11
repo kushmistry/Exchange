@@ -18,19 +18,19 @@ export async function getTicker(market: string): Promise<Ticker> {
 }
 
 export async function getTickers(): Promise<Ticker[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return [
-    {
-      firstPrice: "0.3",
-      high: "0.3",
-      lastPrice: "0.3",
-      low: "0.3",
-      priceChange: "0.3",
-      priceChangePercent: "0.3",
-      quoteVolume: "0.3",
-      symbol: "SOL_USDC",
-      trades: "0.3",
-      volume: "0.3",
-    },
-  ];
+  const response = await axios.get(`${BASE_URL}/tickers`);
+  return response.data;
+}
+
+export async function getKlines(
+  market: string,
+  interval: string,
+  startTime: number,
+  endTime: number
+): Promise<KLine[]> {
+  const response = await axios.get(
+    `${BASE_URL}/klines?symbol=${market}&interval=${interval}&startTime=${startTime}&endTime=${endTime}`
+  );
+  const data: KLine[] = response.data;
+  return data.sort((x, y) => (Number(x.end) < Number(y.end) ? -1 : 1));
 }

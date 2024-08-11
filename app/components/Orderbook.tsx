@@ -51,7 +51,7 @@ export default function Orderbook({ market }: Readonly<{ market: any }>) {
       setDepthLodder(false);
     })();
   }, []);
-  console.log("bids", bids, "asks", asks, "price", price);
+
   return (
     <div className="pl-2 py-2">
       <div className="flex flex-row space-x-4">
@@ -69,7 +69,17 @@ export default function Orderbook({ market }: Readonly<{ market: any }>) {
         }}
       >
         {depthLodder ? (
-          <Loadder />
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Loadder />
+          </div>
         ) : (
           <>
             <AskTable asks={asks} />

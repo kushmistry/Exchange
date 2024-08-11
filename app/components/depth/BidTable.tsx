@@ -1,8 +1,8 @@
 export default function BidTable({
   bids,
 }: Readonly<{ bids: [string, string][] }>) {
-  const orderBookBids = [...bids].splice(0, 15);
-  orderBookBids.reverse();
+  const reversedBids = [...bids].reverse();
+  const orderBookBids = reversedBids.splice(0, 15);
 
   let bidsWithTotal: [string, string, number][] = [];
   let maxTotal = 0;
