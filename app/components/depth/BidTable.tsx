@@ -61,7 +61,7 @@ const Bid = ({
           width: `${(100 * total) / maxTotal}%`,
           height: "100%",
           background: "rgba(1, 167, 129, 0.325)",
-          transition: "width 0.3s ease-in-out",
+          transition: "width 0.4s ease-in-out",
           paddingLeft: "2px",
           paddingRight: "2px",
         }}

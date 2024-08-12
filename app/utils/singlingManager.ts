@@ -35,7 +35,6 @@ export class SinglingManager {
 
     this.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log(message);
       const type = message.data.e;
       if (this.callbacks[type]) {
         this.callbacks[type].forEach(({ callback }) => {
@@ -57,6 +56,14 @@ export class SinglingManager {
               asks: updatedAsks,
             };
             callback(newDepth);
+          } else if (type === "trade") {
+            const lastTrade = {
+              price: message.data.p,
+              quantity: message.data.q,
+              timestamp: message.data.t,
+              id: Math.floor(Math.random() * 10000),
+            };
+            callback(lastTrade);
           }
         });
       }

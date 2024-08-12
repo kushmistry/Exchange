@@ -62,7 +62,7 @@ const Ask = ({
           width: `${(100 * total) / maxTotal}%`,
           height: "100%",
           background: "rgba(228, 75, 68, 0.325)",
-          transition: "width 0.3s ease-in-out",
+          transition: "width 0.4s ease-in-out",
           paddingLeft: "2px",
           paddingRight: "2px",
         }}
